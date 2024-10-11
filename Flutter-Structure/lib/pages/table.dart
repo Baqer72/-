@@ -335,16 +335,8 @@ class _TableState extends State<Tablee> {
     );
   }
 
-  Widget _buildcont(String tital, String desc, double h, double w) {
-    return Center(
-      child: Container(
-        height: h,
-        width: w,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: Colors.amber),
-      ),
-    );
-  }
+  
+  
 
   Widget _buildDayRow(String dayName, int startIndex, double responsiveWidth,
       double responsiveHeight) {
