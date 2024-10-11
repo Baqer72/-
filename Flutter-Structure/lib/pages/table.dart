@@ -14,6 +14,7 @@ class Tablee extends StatefulWidget {
 class _TableState extends State<Tablee> {
   List<dynamic> tableList = [];
   List<Report> reports = [];
+  final base_url = "https://k80sowk80c808s4cogk0woc0.158.220.126.158.sslip.io/api/";
 
   @override
   void initState() {
@@ -335,9 +336,6 @@ class _TableState extends State<Tablee> {
     );
   }
 
-  
-  
-
   Widget _buildDayRow(String dayName, int startIndex, double responsiveWidth,
       double responsiveHeight) {
     return Row(
@@ -368,62 +366,197 @@ class _TableState extends State<Tablee> {
             material['doctorName'] ?? '',
             material['studyHall'] ?? '',
             material['color'] ?? '#FFFFFF',
+            material['progress'] ?? "",
+            material['state'] ?? "لا يوجد",
           ),
         );
       } else {
         containers.add(_fetchContainer('', responsiveWidth * 0.172,
-            responsiveHeight * 0.05, '', '', '#FFFFFF'));
+            responsiveHeight * 0.05, '', '', '#FFFFFF', "لا يوجد", 0));
       }
     }
     return containers;
   }
 
-  Container _fetchContainer(String materialName, double w, double h,
-      String doctorName, String studyHall, String colorHex) {
+  Widget _fetchContainer(
+      String materialName,
+      double w,
+      double h,
+      String doctorName,
+      String studyHall,
+      String colorHex,
+      String progras,
+      int state) {
     Color color = Color(int.parse(colorHex.replaceFirst("#", "0xff")));
-    return Container(
-      width: w,
-      height: h,
-      decoration: BoxDecoration(
-        border: Border.all(width: 0.1),
-        color: color,
-      ),
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Center(
-                child: Wrap(children: [
-                  Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Text(materialName,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 8)))
-                ]),
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                width: 400,
+                height: 360,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    materialName,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontFamily: "arabic",
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  child: ImageIcon(
+                                    AssetImage("assets/icons/xxxxx.png"),
+                                    size: 24,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                            Divider(), // إضافة Divider هنا
+                          ],
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "اسم التدريسي: ${doctorName}",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontFamily: "arabic"),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "القاعة: ${studyHall}",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontFamily: "arabic"),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "الملفات: ${doctorName}",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontFamily: "arabic"),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "التقدم: ${progras}",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontFamily: "arabic"),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "الحالة: ${state}",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontFamily: "arabic"),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "الملاحظات: ",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                  fontFamily: "arabic"),
+                            ),
+                          ),
+                          Container(
+                            height: 60,
+                            width: 380,
+                            decoration:
+                                BoxDecoration(border: Border.all(width: 0.1)),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(studyHall, style: TextStyle(fontSize: 4)),
-                  Text(doctorName, style: TextStyle(fontSize: 4)),
-                ],
+            );
+          },
+        );
+      },
+      child: Container(
+        width: w,
+        height: h,
+        decoration: BoxDecoration(
+          border: Border.all(width: 0.1),
+          color: color,
+        ),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Center(
+                  child: Wrap(children: [
+                    Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(materialName,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 8)))
+                  ]),
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(studyHall, style: TextStyle(fontSize: 4)),
+                    Text(doctorName, style: TextStyle(fontSize: 4)),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Future<void> fetch() async {
-    const url =
-        "http://k80sowk80c808s4cogk0woc0.158.220.126.158.sslip.io/api/dayofweek_table";
+    final url =
+        base_url+"dayofweek_table";
     final uri = Uri.parse(url);
 
     final response = await http.get(uri);
@@ -445,8 +578,8 @@ class _TableState extends State<Tablee> {
   }
 
   Future<void> fetchReports() async {
-    const url =
-        "https://k80sowk80c808s4cogk0woc0.158.220.126.158.sslip.io/api/reports";
+    var url =
+        base_url+"reports";
     final uri = Uri.parse(url);
 
     try {
